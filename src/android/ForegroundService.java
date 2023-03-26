@@ -215,7 +215,9 @@ public class ForegroundService extends Service {
         if (settings.optBoolean("allowClose", false)) {
 
             final Intent clostAppIntent = new Intent("com.backgroundmode.close" + pkgName);
-            final PendingIntent closeIntent = PendingIntent.getBroadcast(context, 1337, clostAppIntent, 0);
+            // https://github.com/WolfWalter/cordova-plugin-usb-serial/pull/1/files
+            // https://stackoverflow.com/questions/67045607/how-to-resolve-missing-pendingintent-mutability-flag-lint-warning-in-android-a
+            final PendingIntent closeIntent = PendingIntent.getBroadcast(context, 1337, clostAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             final String closeIconName = settings.optString("closeIcon", "power");
             NotificationCompat.Action.Builder closeAction = new NotificationCompat.Action.Builder(getIconResId(closeIconName), settings.optString("closeTitle", "Close"), closeIntent);
             notification.addAction(closeAction.build());
